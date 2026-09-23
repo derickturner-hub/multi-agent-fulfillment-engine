@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LandingPageFulfillmentPayload",
+  "description": "Defines the structured payload passed from Keyword Strategy to Web Design for page generation.",
+  "type": "object",
+  "properties": {
+    "account_id": { "type": "string" },
+    "target_location": { "type": "string" },
+    "target_keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "heading_structure": {
+      "type": "object",
+      "properties": {
+        "h1": { "type": "string" },
+        "h2_list": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["h1", "h2_list"]
+    }
+  },
+  "required": ["account_id", "target_location", "target_keywords", "heading_structure"]
+}
