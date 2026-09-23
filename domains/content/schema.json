@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EditorialContentPayload",
+  "description": "Schema contract for long-form SEO blog articles and editorial copy handoffs.",
+  "type": "object",
+  "properties": {
+    "article_id": { "type": "string" },
+    "title": { "type": "string" },
+    "meta_description": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "target_keyword": { "type": "string" },
+    "secondary_keywords": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "body_markdown": { "type": "string" },
+    "qa_status": {
+      "type": "string",
+      "enum": ["passed", "remediated", "failed"]
+    }
+  },
+  "required": ["article_id", "title", "meta_description", "target_keyword", "body_markdown", "qa_status"]
+}
