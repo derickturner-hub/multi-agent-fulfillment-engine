@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LocalSEOPostPayload",
+  "description": "Schema contract for local SEO updates, Google Business Profile posts, and location schema handoffs.",
+  "type": "object",
+  "properties": {
+    "account_id": {
+      "type": "string",
+      "description": "Unique agency client identifier."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Verified Google Business Profile location ID."
+    },
+    "post_type": {
+      "type": "string",
+      "enum": ["UPDATE", "OFFER", "EVENT"],
+      "default": "UPDATE"
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 1500,
+      "description": "Main post body copy stripped of em-dashes and raw contact information."
+    },
+    "call_to_action": {
+      "type": "object",
+      "properties": {
+        "action_type": {
+          "type": "string",
+          "enum": ["BOOK", "ORDER", "BUY", "LEARN_MORE", "CALL"]
+        },
+        "target_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "telephone_number": {
+          "type": "string"
+        }
+      },
+      "required": ["action_type"]
+    },
+    "geo_coordinates": {
+      "type": "object",
+      "properties": {
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" }
+      },
+      "required": ["latitude", "longitude"]
+    }
+  },
+  "required": ["account_id", "location_id", "post_type", "summary", "call_to_action"]
+}
