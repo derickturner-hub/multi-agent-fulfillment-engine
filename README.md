@@ -18,8 +18,6 @@ timeline
                                                 : Built single-sourced Domain Rule Packs (domains/*/rules.md)
                                                 : Defined machine-readable JSON Schemas for inter-agent handoffs
                                                 : Live-wired subagents with non-blocking QA auto-remediation
-
-```mermaid
 graph TD
     AgencyClient([Agency Webhook / Pipeline Request]) --> Orchestrator[CLAUDE.md: Central Orchestrator]
     
