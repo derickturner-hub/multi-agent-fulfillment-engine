@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KeywordStrategyPayload",
+  "description": "Schema contract for keyword strategy and intent mapping handoffs.",
+  "type": "object",
+  "properties": {
+    "campaign_id": { "type": "string" },
+    "target_location": { "type": "string" },
+    "primary_keyword": { "type": "string" },
+    "intent_type": {
+      "type": "string",
+      "enum": ["transactional", "commercial", "informational"]
+    },
+    "secondary_cluster": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 3
+    },
+    "lsi_entities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 8
+    },
+    "target_artifact": {
+      "type": "string",
+      "enum": ["landing_page", "service_page", "editorial_blog"]
+    }
+  },
+  "required": ["campaign_id", "target_location", "primary_keyword", "intent_type", "secondary_cluster", "lsi_entities", "target_artifact"]
+}
