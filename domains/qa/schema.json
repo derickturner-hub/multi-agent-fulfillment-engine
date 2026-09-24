@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QaGovernanceDomainContract",
+  "description": "Data contract for programmatic QA pre-flight checklists and Phase 7 self-correction inputs/outputs.",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "object",
+      "required": ["content_type", "title", "slug", "body"],
+      "properties": {
+        "content_type": {
+          "type": "string",
+          "enum": ["blog", "city_page", "refresh", "gbp"]
+        },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "body": {
+          "type": "string",
+          "description": "Rendered HTML for blog/city_page or Markdown copy for refresh/gbp."
+        },
+        "meta_description": { "type": "string" },
+        "target_keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "required": ["rules", "summary"],
+      "properties": {
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "category", "status", "detail"],
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "category": {
+                "type": "string",
+                "enum": ["Brand", "Compliance", "SEO", "AI/GEO", "Structure", "Depth"]
+              },
+              "status": {
+                "type": "string",
+                "enum": ["pass", "fail", "warn"]
+              },
+              "detail": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "summary": {
+          "type": "object",
+          "required": ["pass", "fail", "warn"],
+          "properties": {
+            "pass": { "type": "integer", "minimum": 0 },
+            "fail": { "type": "integer", "minimum": 0 },
+            "warn": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
