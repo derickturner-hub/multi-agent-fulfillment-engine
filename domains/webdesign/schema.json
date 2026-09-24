@@ -1,24 +1,98 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "LandingPageFulfillmentPayload",
-  "description": "Defines the structured payload passed from Keyword Strategy to Web Design for page generation.",
+  "title": "WebDesignDomainContract",
+  "description": "Data contract for site builds, audits, launches, and page mapping.",
   "type": "object",
   "properties": {
-    "account_id": { "type": "string" },
-    "target_location": { "type": "string" },
-    "target_keywords": {
-      "type": "array",
-      "items": { "type": "string" },
-      "minItems": 1
-    },
-    "heading_structure": {
+    "input": {
       "type": "object",
+      "required": ["client_slug", "skill", "platform_confirmed"],
       "properties": {
-        "h1": { "type": "string" },
-        "h2_list": { "type": "array", "items": { "type": "string" } }
+        "client_slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "mcp_servers": {
+          "type": "object",
+          "properties": {
+            "wordpress": {
+              "type": "object",
+              "properties": {
+                "novamira": { "type": "string" },
+                "ai_engine": { "type": "string" }
+              }
+            },
+            "webflow": {
+              "oneOf": [
+                { "type": "string", "enum": ["shared-workspace"] },
+                {
+                  "type": "object",
+                  "required": ["composio_account"],
+                  "properties": {
+                    "composio_account": { "type": "string" }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "skill": {
+          "type": "string",
+          "enum": [
+            "/jnm-new-site",
+            "/jnm-site-audit",
+            "/jnm-site-seo",
+            "/jnm-site-launch",
+            "/jnm-wp-nav",
+            "/jnm-wp-migrate",
+            "/jnm-webflow-migrate",
+            "site-plan-mapping"
+          ]
+        },
+        "keyword_map_path": {
+          "type": "string",
+          "pattern": "^clients/[a-z0-9-]+/strategy/keyword-research\\.md$"
+        },
+        "platform_confirmed": {
+          "type": "boolean",
+          "const": true,
+          "description": "Must be curl-verified live (curl -sI) before execution."
+        }
       },
-      "required": ["h1", "h2_list"]
+      "additionalProperties": false
+    },
+    "audit_output": {
+      "type": "object",
+      "required": ["findings"],
+      "properties": {
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["page", "issue", "category"],
+            "properties": {
+              "page": { "type": "string" },
+              "issue": { "type": "string" },
+              "category": {
+                "type": "string",
+                "enum": ["no_jargon", "no_emojis", "review_threshold", "broken_link", "schema"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "seo_gate_output": {
+      "type": "object",
+      "required": ["schema_markup", "redirects_301", "ssl"],
+      "properties": {
+        "schema_markup": { "type": "string", "enum": ["pass", "fail"] },
+        "redirects_301": { "type": "string", "enum": ["pass", "fail"] },
+        "ssl": { "type": "string", "enum": ["pass", "fail"] }
+      },
+      "additionalProperties": false
     }
-  },
-  "required": ["account_id", "target_location", "target_keywords", "heading_structure"]
+  }
 }
