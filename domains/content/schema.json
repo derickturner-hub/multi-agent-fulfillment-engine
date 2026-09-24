@@ -1,25 +1,120 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "EditorialContentPayload",
-  "description": "Schema contract for long-form SEO blog articles and editorial copy handoffs.",
+  "title": "ContentDomainContract",
+  "description": "Data contract for editorial blog posts and localized city/service page generation.",
   "type": "object",
   "properties": {
-    "article_id": { "type": "string" },
-    "title": { "type": "string" },
-    "meta_description": {
-      "type": "string",
-      "maxLength": 160
+    "blog_input": {
+      "type": "object",
+      "required": ["client_slug", "topic_or_target_keyword", "target_publish_month", "post_number_this_month"],
+      "properties": {
+        "client_slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "topic_or_target_keyword": { "type": "string" },
+        "target_publish_month": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+        },
+        "post_number_this_month": {
+          "type": "integer",
+          "enum": [1, 2]
+        }
+      },
+      "additionalProperties": false
     },
-    "target_keyword": { "type": "string" },
-    "secondary_keywords": {
-      "type": "array",
-      "items": { "type": "string" }
+    "city_page_input": {
+      "type": "object",
+      "required": ["client_slug", "target_city_or_service", "primary_keyword", "target_publish_month", "confirmed_real_gap"],
+      "properties": {
+        "client_slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "target_city_or_service": { "type": "string" },
+        "primary_keyword": { "type": "string" },
+        "target_publish_month": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+        },
+        "confirmed_real_gap": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "additionalProperties": false
     },
-    "body_markdown": { "type": "string" },
-    "qa_status": {
-      "type": "string",
-      "enum": ["passed", "remediated", "failed"]
+    "blog_output": {
+      "type": "object",
+      "required": ["file", "word_count", "primary_keyword", "internal_links", "scheduled_publish", "manifest_entry"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^clients/[a-z0-9-]+/content/[0-9]{4}-[0-9]{2}/.*\\.(html|md)$"
+        },
+        "word_count": {
+          "type": "integer",
+          "minimum": 1500,
+          "maximum": 2000
+        },
+        "primary_keyword": { "type": "string" },
+        "internal_links": {
+          "type": "object",
+          "required": ["city_pages", "service_pages"],
+          "properties": {
+            "city_pages": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string" }
+            },
+            "service_pages": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "scheduled_publish": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "manifest_entry": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "city_page_output": {
+      "type": "object",
+      "required": ["file", "word_count", "primary_keyword", "internal_links", "title_vs_h1_confirmed", "faq_headings_confirmed", "manifest_entry"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "pattern": "^clients/[a-z0-9-]+/content/[0-9]{4}-[0-9]{2}/.*\\.html$"
+        },
+        "word_count": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2200
+        },
+        "primary_keyword": { "type": "string" },
+        "internal_links": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 6,
+          "items": { "type": "string" }
+        },
+        "title_vs_h1_confirmed": {
+          "type": "boolean",
+          "const": true
+        },
+        "faq_headings_confirmed": {
+          "type": "boolean",
+          "const": true
+        },
+        "manifest_entry": { "type": "string" }
+      },
+      "additionalProperties": false
     }
-  },
-  "required": ["article_id", "title", "meta_description", "target_keyword", "body_markdown", "qa_status"]
+  }
 }
